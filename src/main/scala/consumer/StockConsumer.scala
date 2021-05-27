@@ -27,10 +27,11 @@ object StockConsumer extends App {
 
   val conf = new SparkConf
 
-  conf.set("spark.master", Properties.envOrElse("SPARK_MASTER_URL", "spark://spark-master:7077"))
-  conf.set("spark.driver.host", Properties.envOrElse("SPARK_DRIVER_HOST", "local[*]"))
+  //conf.set("spark.master", Properties.envOrElse("SPARK_MASTER_URL", "spark://spark-master:7077"))
+  //conf.set("spark.driver.host", Properties.envOrElse("SPARK_DRIVER_HOST", "local[*]"))
   conf.set("spark.submit.deployMode", "client")
-  conf.set("spark.driver.bindAddress", "0.0.0.0")
+  //conf.set("spark.driver.bindAddress", "0.0.0.0")
+  conf.set("partition.assignment.strategy", "range")
   conf.set("spark.app.name", "StockConsumer")
 
   val spark = SparkSession
@@ -42,6 +43,7 @@ object StockConsumer extends App {
     .read
     .format("kafka")
     .option("kafka.bootstrap.servers", BROKER_LIST)
+    .option("partition.assignment.strategy", "range")
     .option("startingOffsets", "earliest")
     .option("subscribe", TOPIC)
     .load()
