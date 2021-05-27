@@ -92,8 +92,6 @@ object StockConsumer extends App {
     println("Time :: " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now) + "\n\n\n")
     Thread.sleep(30000)
   }
-
-
 }
 
 /*
