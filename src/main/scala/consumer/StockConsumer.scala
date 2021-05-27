@@ -1,10 +1,12 @@
 package consumer
-
+/*
 import scala.collection.JavaConverters._
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.common.serialization.StringDeserializer
 
 import java.util.Properties
+*/
+import org.apache.spark.SparkConf
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -16,33 +18,24 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.{ArrayType, StructType}
 import org.apache.spark.sql.DataFrame
 
+import scala.util.Properties
+
 object StockConsumer extends App {
-  /*
-  val properties = new Properties()
-  properties.put("bootstrap.servers", BROKER_LIST)
-  properties.put("group.id", "stock-consumers")
-  properties.put("partition.assignment.strategy", "")
-  properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-  properties.put("key.deserializer", classOf[StringDeserializer])
-  properties.put("value.deserializer", classOf[StringDeserializer])
 
-  val kafkaConsumer = new KafkaConsumer[String, String](properties)
-  kafkaConsumer.subscribe(TOPIC)
-
-  while (true) {
-    val results = kafkaConsumer.poll(2000).asScala
-    println(results)
-    for ((topic, data) <- results) {
-      println(topic + " :: " + data)
-    }
-  }
-  */
   val BROKER_LIST = "localhost:9092"
   val TOPIC = "test"
 
+  val conf = new SparkConf
+
+  conf.set("spark.master", Properties.envOrElse("SPARK_MASTER_URL", "spark://spark-master:7077"))
+  conf.set("spark.driver.host", Properties.envOrElse("SPARK_DRIVER_HOST", "local[*]"))
+  conf.set("spark.submit.deployMode", "client")
+  conf.set("spark.driver.bindAddress", "0.0.0.0")
+  conf.set("spark.app.name", "StockConsumer")
+
   val spark = SparkSession
     .builder()
-    .appName("StockConsumer")
+    .config(conf = conf)
     .getOrCreate()
 
   val df = spark
@@ -117,4 +110,25 @@ object StockConsumer extends App {
   val df5 = df4.select("stock1", "stock2", "stock3")
   df5.writeStream.format("console").start()
 *
+*
+* /*
+  val properties = new Properties()
+  properties.put("bootstrap.servers", BROKER_LIST)
+  properties.put("group.id", "stock-consumers")
+  properties.put("partition.assignment.strategy", "")
+  properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+  properties.put("key.deserializer", classOf[StringDeserializer])
+  properties.put("value.deserializer", classOf[StringDeserializer])
+
+  val kafkaConsumer = new KafkaConsumer[String, String](properties)
+  kafkaConsumer.subscribe(TOPIC)
+
+  while (true) {
+    val results = kafkaConsumer.poll(2000).asScala
+    println(results)
+    for ((topic, data) <- results) {
+      println(topic + " :: " + data)
+    }
+  }
+  */
 * */
