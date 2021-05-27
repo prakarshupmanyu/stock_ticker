@@ -1,6 +1,5 @@
 package producer
 
-//import org.apache.spark.sql.SparkSession
 import com.google.gson.Gson
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
