@@ -23,7 +23,7 @@ import scala.util.Properties
 object StockConsumer extends App {
 
   val BROKER_LIST = "localhost:9092"
-  val TOPIC = "test"
+  val TOPIC = "stocks"
 
   val conf = new SparkConf
 
@@ -31,7 +31,7 @@ object StockConsumer extends App {
   //conf.set("spark.driver.host", Properties.envOrElse("SPARK_DRIVER_HOST", "local[*]"))
   conf.set("spark.submit.deployMode", "client")
   //conf.set("spark.driver.bindAddress", "0.0.0.0")
-  conf.set("partition.assignment.strategy", "range")
+  conf.set("partition.assignment.strategy", "")
   conf.set("spark.app.name", "StockConsumer")
 
   val spark = SparkSession

@@ -9,12 +9,12 @@ import scala.util.Random
 case class Stock(name: String, price: Int)
 case class Message(tickers: Array[Stock])
 
-//command line => scala -classpath "target/my_scala_project-1.0-SNAPSHOT-jar-with-dependencies.jar" producer.StockProducer
+//command line => scala -classpath "target/stock_ticker-1.0-SNAPSHOT-jar-with-dependencies.jar" producer.StockProducer
 
 object StockProducer extends App {
 
   val BROKER_LIST = "localhost:9092"
-  val TOPIC = "test"
+  val TOPIC = "stocks"
   val BATCH_SIZE = 10
   val TIME_TO_WAIT_MILLIS: Long = 100
 
